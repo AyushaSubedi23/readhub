@@ -1,13 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // =========================
+    // ELEMENTS
+    // =========================
+
     const searchInput = document.getElementById("exploreSearch");
     const tagButtons = document.querySelectorAll(".tag-btn");
     const bookCards = document.querySelectorAll(".book-card");
 
-    // =========================
-    // BOOK DETAIL MODAL
-    // =========================
-
+    // Book detail modal
     const modal = document.getElementById("bookModal");
     const closeModal = document.getElementById("closeModal");
 
@@ -20,11 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const readBookBtn = document.getElementById("readBookBtn");
     const addWishlistBtn = document.getElementById("addWishlistBtn");
 
-
-    // =========================
-    // PDF MODAL
-    // =========================
-
+    // PDF modal
     const pdfModal = document.getElementById("pdfModal");
     const closePdfModal = document.getElementById("closePdfModal");
     const pdfIframe = document.getElementById("pdfIframe");
@@ -39,7 +36,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentTitle = "";
     let currentAuthor = "";
     let currentCover = "";
-
 
     let activeGenre = "all";
 
@@ -56,39 +52,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
         bookCards.forEach((card) => {
 
-            const title =
-                card.dataset.title
-                    ? card.dataset.title.toLowerCase()
-                    : "";
+            const title = card.dataset.title
+                ? card.dataset.title.toLowerCase()
+                : "";
 
-            const author =
-                card.dataset.author
-                    ? card.dataset.author.toLowerCase()
-                    : "";
+            const author = card.dataset.author
+                ? card.dataset.author.toLowerCase()
+                : "";
 
-            const genre =
-                card.dataset.genre
-                    ? card.dataset.genre.toLowerCase()
-                    : "";
-
+            const genre = card.dataset.genre
+                ? card.dataset.genre.toLowerCase()
+                : "";
 
             const matchesSearch =
                 title.includes(query) ||
                 author.includes(query);
 
-
             const matchesGenre =
                 activeGenre === "all" ||
                 genre === activeGenre;
-
 
             card.style.display =
                 matchesSearch && matchesGenre
                     ? "block"
                     : "none";
-
         });
-
     }
 
 
@@ -144,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const rating =
                 card.querySelector(".rating");
 
-
+            // Get book information
             currentPdf =
                 card.dataset.pdf || "";
 
@@ -162,7 +150,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 image ? image.src : "";
 
 
-            // Fill modal
+            // =========================
+            // FILL MODAL
+            // =========================
 
             if (modalCover) {
                 modalCover.src = currentCover;
@@ -191,8 +181,37 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
 
-            // Open details modal
+            // Reset wishlist button
+            if (addWishlistBtn) {
 
+                const wishlist =
+                    JSON.parse(
+                        localStorage.getItem("readhub_wishlist") || "[]"
+                    );
+
+                const alreadyAdded =
+                    wishlist.some(
+                        book => book.title === currentTitle
+                    );
+
+                if (alreadyAdded) {
+                    addWishlistBtn.innerText =
+                        "✓ Added to Wishlist";
+
+                    addWishlistBtn.disabled = true;
+
+                } else {
+
+                    addWishlistBtn.innerText =
+                        "♡ Add to Wishlist";
+
+                    addWishlistBtn.disabled = false;
+
+                }
+            }
+
+
+            // Open modal
             if (modal) {
                 modal.style.display = "flex";
             }
@@ -201,88 +220,74 @@ document.addEventListener("DOMContentLoaded", () => {
 
     });
 
+
     // =========================
-// ADD TO WISHLIST
-// =========================
+    // ADD TO WISHLIST
+    // =========================
 
-if (addWishlistBtn) {
+    if (addWishlistBtn) {
 
-    addWishlistBtn.addEventListener("click", async () => {
+        addWishlistBtn.addEventListener("click", () => {
 
-        const token =
-            localStorage.getItem("readhub_token");
+            if (!currentTitle || !currentAuthor) {
 
-        const userId =
-            localStorage.getItem("readhub_user_id");
+                alert("Could not identify this book.");
 
-        // Check login
-        if (!token || !userId) {
-            alert("Please login first.");
-            return;
-        }
-
-        // Check book
-        if (!currentTitle || !currentAuthor) {
-            alert("Could not identify this book.");
-            return;
-        }
-
-        try {
-
-            const response = await fetch(
-                "http://127.0.0.1:5001/api/library",
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    },
-
-                    body: JSON.stringify({
-                        title: currentTitle,
-                        author: currentAuthor,
-                        cover_url: currentCover,
-                        status: "wishlist"
-                    })
-                }
-            );
-
-            const result = await response.json();
-
-            if (response.ok) {
-
-                alert("♡ Added to your Wishlist!");
-
-                // Change button appearance
-                addWishlistBtn.innerText = "✓ Added to Wishlist";
-                addWishlistBtn.disabled = true;
-
-            } else {
-
-                alert(
-                    result.message ||
-                    "Could not add book to wishlist."
-                );
-
+                return;
             }
 
-        } catch (error) {
 
-            console.error(
-                "Wishlist error:",
-                error
+            // Get existing wishlist
+            let wishlist =
+                JSON.parse(
+                    localStorage.getItem("readhub_wishlist") || "[]"
+                );
+
+
+            // Check if already exists
+            const alreadyExists =
+                wishlist.some(
+                    book => book.title === currentTitle
+                );
+
+            if (alreadyExists) {
+
+                alert("This book is already in your Wishlist.");
+
+                return;
+            }
+
+
+            // Add book
+            const book = {
+                title: currentTitle,
+                author: currentAuthor,
+                cover: currentCover,
+                status: "wishlist"
+            };
+
+            wishlist.push(book);
+
+
+            // Save to browser
+            localStorage.setItem(
+                "readhub_wishlist",
+                JSON.stringify(wishlist)
             );
 
-            alert(
-                "Could not connect to the backend."
-            );
 
-        }
+            // Update button
+            addWishlistBtn.innerText =
+                "✓ Added to Wishlist";
 
-    });
+            addWishlistBtn.disabled = true;
 
-}
+
+            alert("♡ Added to your Wishlist!");
+
+        });
+
+    }
 
 
     // =========================
@@ -308,28 +313,9 @@ if (addWishlistBtn) {
 
     if (readBookBtn) {
 
-        readBookBtn.addEventListener("click", async () => {
-
-            // Check login
-
-            const token =
-                localStorage.getItem("readhub_token");
-
-            const userId =
-                localStorage.getItem("readhub_user_id");
-
-
-            if (!token || !userId) {
-
-                alert("Please login first.");
-
-                return;
-
-            }
-
+        readBookBtn.addEventListener("click", () => {
 
             // Check PDF
-
             if (!currentPdf) {
 
                 alert(
@@ -337,22 +323,34 @@ if (addWishlistBtn) {
                 );
 
                 return;
-
             }
 
 
             // Close details modal
-
             if (modal) {
                 modal.style.display = "none";
             }
 
 
-            // Save current book locally
-
+            // Save current book
             localStorage.setItem(
                 "readhub_current_book",
                 currentTitle
+            );
+
+
+            // Save current book information
+            const currentBook = {
+                title: currentTitle,
+                author: currentAuthor,
+                cover: currentCover,
+                pdf: currentPdf,
+                status: "current"
+            };
+
+            localStorage.setItem(
+                "readhub_current_book_data",
+                JSON.stringify(currentBook)
             );
 
 
@@ -361,49 +359,7 @@ if (addWishlistBtn) {
             // =========================
 
             window.location.href =
-                `/read?file=${encodeURIComponent(currentPdf)}&title=${encodeURIComponent(currentTitle)}`;
-
-
-            // =========================
-            // SAVE TO LIBRARY
-            // =========================
-
-            try {
-
-                await fetch(
-                    "http://127.0.0.1:5001/api/library",
-                    {
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization":
-                                `Bearer ${token}`
-                        },
-
-                        body: JSON.stringify({
-
-                            title: currentTitle,
-
-                            author: currentAuthor,
-
-                            cover_url: currentCover,
-
-                            status: "current"
-
-                        })
-
-                    }
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Could not save book to library:",
-                    error
-                );
-
-            }
+                `reader.html?file=${encodeURIComponent(currentPdf)}&title=${encodeURIComponent(currentTitle)}`;
 
         });
 
@@ -449,7 +405,6 @@ if (addWishlistBtn) {
                 if (!pdfContent) {
                     return;
                 }
-
 
                 try {
 
