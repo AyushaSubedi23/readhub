@@ -9,10 +9,7 @@
 ```
 <title>ReadHub - Reader</title>
 
-<link
-    rel="stylesheet"
-    href="{{ url_for('static', filename='css/style.css') }}"
->
+    <link rel="stylesheet" href="../static/css/style.css">
 
 <!-- PDF.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -40,7 +37,7 @@
     }
 
     /* ============================
-       READER NAVIGATION
+    READER NAVIGATION
     ============================ */
 
     .reader-nav {
@@ -236,8 +233,7 @@
 
     <!-- READER NAVIGATION -->
     <nav class="reader-nav">
-        <a href="{{ url_for('index') }}">← ReadHub</a>
-
+        <a href="index.html">← ReadHub</a>
         <div class="reader-title" id="readerTitle">
             Reader
         </div>
@@ -499,7 +495,7 @@
 
 
         const pdfURL =
-            `/static/pdf/${encodeURIComponent(pdfFile)}`;
+            `../static/pdf/${encodeURIComponent(pdfFile)}`;
 
 
         try {

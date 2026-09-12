@@ -9,8 +9,8 @@
 
     <link
         rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
+        href="../static/css/style.css"
+        >
 
     <style>
         /* =========================
@@ -380,33 +380,31 @@
 
             <div class="nav-links">
 
-                <a href="{{ url_for('index') }}">
-                    Home
-                </a>
+                <a href="index.html">
+    Home
+</a>
 
-                <a href="{{ url_for('explore') }}">
-                    Explore
-                </a>
+<a href="explore.html">
+    Explore
+</a>
 
-                <a
-                    href="{{ url_for('library') }}"
-                    class="active"
-                >
-                    Library
-                </a>
+<a
+    href="library.html"
+    class="active"
+>
+    Library
+</a>
 
-                <a href="{{ url_for('exchange') }}">
-                    Exchange
-                </a>
+<a href="exchange.html">
+    Exchange
+</a>
 
-            </div>
-
-            <a
-                href="{{ url_for('profile') }}"
-                class="profile-btn"
-            >
-                Profile
-            </a>
+<a
+    href="profile.html"
+    class="profile-btn"
+>
+    Profile
+</a>
 
         </nav>
 
@@ -541,7 +539,7 @@
          ========================= -->
 
     <script
-        src="{{ url_for('static', filename='js/library.js') }}"
+        src="../static/js/library.js"
     ></script>
 
 </body>

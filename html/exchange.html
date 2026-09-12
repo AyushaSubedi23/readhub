@@ -7,10 +7,7 @@
 
     <title>ReadHub - Exchange</title>
 
-    <link
-        rel="stylesheet"
-        href="{{ url_for('static', filename='css/style.css') }}"
-    >
+    <link rel="stylesheet" href="../static/css/style.css">
 
     <style>
         /* =========================
@@ -452,7 +449,7 @@
         }
 
         /* =========================
-           MOBILE
+        MOBILE
            ========================= */
 
         @media (max-width: 550px) {
@@ -500,55 +497,52 @@
 <body>
 
     <!-- =========================
-         NAVIGATION
-         ========================= -->
+        NAVIGATION
+    ========================= -->
 
-    <header>
+        <header>
 
-        <nav>
+    <nav>
 
-            <div class="logo">
-                ReadHub
-            </div>
+        <div class="logo">
+            ReadHub
+        </div>
 
-            <div class="nav-links">
+        <div class="nav-links">
 
-                <a href="{{ url_for('index') }}">
-                    Home
-                </a>
-
-                <a href="{{ url_for('explore') }}">
-                    Explore
-                </a>
-
-                <a href="{{ url_for('library') }}">
-                    Library
-                </a>
-
-                <a
-                    href="{{ url_for('exchange') }}"
-                    class="active"
-                >
-                    Exchange
-                </a>
-
-            </div>
-
-            <a
-                href="{{ url_for('profile') }}"
-                class="profile-btn"
-            >
-                Profile
+            <a href="index.html">
+                Home
             </a>
 
-        </nav>
+            <a href="explore.html">
+                Explore
+            </a>
 
-    </header>
+            <a href="library.html">
+                Library
+            </a>
+
+            <a href="exchange.html" class="active">
+                Exchange
+            </a>
+
+        </div>
+
+        <a
+            href="profile.html"
+            class="profile-btn"
+        >
+            Profile
+        </a>
+
+    </nav>
+
+</header> 
 
 
     <!-- =========================
-         MAIN CONTENT
-         ========================= -->
+        MAIN CONTENT
+    ========================= -->
 
     <main class="exchange-page">
 
@@ -778,7 +772,7 @@
          ========================= -->
 
     <script
-        src="{{ url_for('static', filename='js/exchange.js') }}"
+        src="../static/js/exchange.js"
     ></script>
 
 </body>

@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login - ReadHub</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #EFE2BA;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: #4056A1;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4056A1;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #4056A1;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+        }
+
+        .switch a {
+            color: #4056A1;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #4056A1;
+            text-decoration: none;
+        }
+
+        #signupForm {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="auth-container">
+
+        <div class="auth-card">
+
+            <div class="logo">ReadHub</div>
+
+            <!-- ========================= -->
+            <!-- LOGIN -->
+            <!-- ========================= -->
+
+            <div id="loginForm">
+
+                <p class="subtitle">
+                    Welcome back, reader!
+                </p>
+
+                <h2>Login</h2>
+
+                <form onsubmit="loginUser(event)">
+
+                    <div class="form-group">
+                        <label for="loginEmail">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="loginEmail"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit">
+                        Login
+                    </button>
+
+                </form>
+
+                <div
+                    id="loginMessage"
+                    class="message">
+                </div>
+
+                <div class="switch">
+                    Don't have an account?
+                    <a onclick="showSignup()">
+                        Create one
+                    </a>
+                </div>
+
+            </div>
+
+
+            <!-- ========================= -->
+            <!-- SIGN UP -->
+            <!-- ========================= -->
+
+            <div id="signupForm">
+
+                <p class="subtitle">
+                    Create your ReadHub account
+                </p>
+
+                <h2>Sign Up</h2>
+
+                <form onsubmit="signupUser(event)">
+
+                    <div class="form-group">
+                        <label for="signupName">
+                            Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="signupName"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupEmail">
+                            Email
+                        </label>
+
+                        <input
+                            type="email"
+                            id="signupEmail"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupPassword">
+                            Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="signupPassword"
+                            minlength="6"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signupConfirmPassword">
+                            Confirm Password
+                        </label>
+
+                        <input
+                            type="password"
+                            id="signupConfirmPassword"
+                            minlength="6"
+                            required
+                        >
+                    </div>
+
+                    <button type="submit">
+                        Create Account
+                    </button>
+
+                </form>
+
+                <div
+                    id="signupMessage"
+                    class="message">
+                </div>
+
+                <div class="switch">
+                    Already have an account?
+                    <a onclick="showLogin()">
+                        Login
+                    </a>
+                </div>
+
+            </div>
+
+            <a
+                href="/"
+                class="back">
+                ← Back to ReadHub
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // =========================================
+        // SHOW LOGIN
+        // =========================================
+
+        function showLogin() {
+
+            document.getElementById(
+                "loginForm"
+            ).style.display = "block";
+
+            document.getElementById(
+                "signupForm"
+            ).style.display = "none";
+        }
+
+
+        // =========================================
+        // SHOW SIGNUP
+        // =========================================
+
+        function showSignup() {
+
+            document.getElementById(
+                "loginForm"
+            ).style.display = "none";
+
+            document.getElementById(
+                "signupForm"
+            ).style.display = "block";
+        }
+
+
+        // =========================================
+        // SIGNUP
+        // =========================================
+
+        async function signupUser(event) {
+
+            event.preventDefault();
+
+            const name =
+                document.getElementById(
+                    "signupName"
+                ).value.trim();
+
+            const email =
+                document.getElementById(
+                    "signupEmail"
+                ).value.trim();
+
+            const password =
+                document.getElementById(
+                    "signupPassword"
+                ).value;
+
+            const confirmPassword =
+                document.getElementById(
+                    "signupConfirmPassword"
+                ).value;
+
+            const message =
+                document.getElementById(
+                    "signupMessage"
+                );
+
+            if (password !== confirmPassword) {
+
+                message.style.color = "red";
+
+                message.textContent =
+                    "Passwords do not match.";
+
+                return;
+            }
+
+            try {
+
+                const response =
+                    await fetch("http://127.0.0.1:5001/api/signup",
+                    {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                name: name,
+                                email: email,
+                                password: password,
+                                confirm_password:
+                                    confirmPassword
+                            })
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    message.style.color = "red";
+
+                    message.textContent =
+                        data.message ||
+                        "Signup failed.";
+
+                    return;
+                }
+
+                // Save real authentication token
+                localStorage.setItem(
+                    "readhub_token",
+                    data.token
+                );
+
+                localStorage.setItem(
+                    "readhub_user_id",
+                    data.user.id
+                );
+
+                localStorage.setItem(
+                    "readhub_user",
+                    JSON.stringify(
+                        data.user
+                    )
+                );
+
+                message.style.color = "green";
+
+                message.textContent =
+                    "Account created!";
+
+                // Go to homepage
+                setTimeout(
+                    function () {
+                        window.location.href = "/";
+                    },
+                    700
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.style.color = "red";
+
+                message.textContent =
+                    "Could not connect to the server.";
+            }
+        }
+
+
+        // =========================================
+        // LOGIN
+        // =========================================
+
+        async function loginUser(event) {
+
+            event.preventDefault();
+
+            const email =
+                document.getElementById(
+                    "loginEmail"
+                ).value.trim();
+
+            const password =
+                document.getElementById(
+                    "loginPassword"
+                ).value;
+
+            const message =
+                document.getElementById(
+                    "loginMessage"
+                );
+
+            try {
+
+                const response =
+                    await fetch("http://127.0.0.1:5001/api/login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                email: email,
+                                password: password
+                            })
+                        }
+                    );
+
+                const data =
+                    await response.json();
+
+                if (!response.ok) {
+
+                    message.style.color = "red";
+
+                    message.textContent =
+                        data.message ||
+                        "Login failed.";
+
+                    return;
+                }
+
+                // Save REAL token
+                localStorage.setItem(
+                    "readhub_token",
+                    data.token
+                );
+
+                localStorage.setItem(
+                    "readhub_user_id",
+                    data.user.id
+                );
+
+                localStorage.setItem(
+                    "readhub_user",
+                    JSON.stringify(
+                        data.user
+                    )
+                );
+
+                message.style.color = "green";
+
+                message.textContent =
+                    "Login successful!";
+
+                setTimeout(
+                    function () {
+                        window.location.href = "/";
+                    },
+                    500
+                );
+
+            } catch (error) {
+
+                console.error(error);
+
+                message.style.color = "red";
+
+                message.textContent =
+                    "Could not connect to the server.";
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
