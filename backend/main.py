@@ -392,25 +392,30 @@ def get_progress(title):
 
 
 
-@app.route(
-    "/api/library/<int:book_id>",
-    methods=["DELETE"]
-)
+@app.route("/api/library/<int:book_id>", methods=["DELETE"])
 def delete_book(book_id):
-
     conn = get_db_connection()
 
-    conn.execute("""
-        DELETE FROM books
-        WHERE id = ?
-    """, (book_id,))
+    book = conn.execute(
+        "SELECT id FROM books WHERE id = ?",
+        (book_id,)
+    ).fetchone()
+
+    if not book:
+        conn.close()
+        return jsonify({"message": "Book not found"}), 404
+
+    conn.execute(
+        "DELETE FROM books WHERE id = ?",
+        (book_id,)
+    )
 
     conn.commit()
     conn.close()
 
-    return jsonify({
-        "message": "Book deleted successfully!"
-    })
+    return jsonify({"message": "Book deleted successfully!"}), 200
+
+
 
 @app.route("/api/library/<int:book_id>", methods=["PUT"])
 def update_book_status(book_id):
