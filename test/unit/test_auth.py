@@ -13,9 +13,9 @@ def test_register_valid_user():
         "/api/signup",
         json={
             "name": "Test User",
-            "email": "testuser123@example.com",
+            "email": "testuser124@example.com",
             "password": "test123",
-            "confirm": "test123"
+            "confirm_password": "test123"
         }
     )
 
@@ -25,3 +25,16 @@ def test_register_valid_user():
     assert data["success"] is True
     assert "token" in data
     assert "user" in data
+
+def test_login_valid_user():
+    client = main.app.test_client()
+
+    response = client.post(
+        "/api/login",
+        json={
+            "email": "testuser124@example.com",
+            "password": "test123"
+        }
+    )
+
+    assert response.status_code == 200

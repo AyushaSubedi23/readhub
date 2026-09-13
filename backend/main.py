@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 import sqlite3
-
+from werkzeug.security import generate_password_hash, check_password_hash
+import secrets
 app = Flask(__name__, template_folder="html")
 
 DATABASE = "readhub.db"
@@ -21,6 +22,22 @@ def get_db_connection():
             status TEXT DEFAULT 'wishlist',
             current_page INTEGER DEFAULT 1,
             total_pages INTEGER DEFAULT 0
+        )
+    """)
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+    """)
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS sessions (
+            token TEXT PRIMARY KEY,
+            user_id INTEGER NOT NULL
         )
     """)
 
@@ -463,6 +480,157 @@ def cleanup_gatsby():
         "Gatsby duplicates cleaned up and status set to current."
     })
 
+
+@app.route("/api/signup", methods=["POST"])
+def signup():
+    data = request.get_json() or {}
+
+    name = data.get("name", "").strip()
+    email = data.get("email", "").strip()
+    password = data.get("password", "")
+    confirm_password = data.get("confirm_password", "")
+
+    if not name or not email or not password:
+        return jsonify({"success": False, "message": "All fields are required"}), 400
+
+    if len(password) < 6:
+        return jsonify({"success": False, "message": "Password must be at least 6 characters"}), 400
+
+    if password != confirm_password:
+        return jsonify({"success": False, "message": "Passwords do not match"}), 400
+
+    conn = get_db_connection()
+
+    existing = conn.execute(
+        "SELECT id FROM users WHERE email = ?",
+        (email,)
+    ).fetchone()
+
+    if existing:
+        conn.close()
+        return jsonify({"success": False, "message": "Email already exists"}), 409
+
+    password_hash = generate_password_hash(password)
+
+    cursor = conn.execute(
+        "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+        (name, email, password_hash)
+    )
+
+    user_id = cursor.lastrowid
+    token = secrets.token_hex(32)
+
+    conn.execute(
+        "INSERT INTO sessions (token, user_id) VALUES (?, ?)",
+        (token, user_id)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "token": token,
+        "user": {
+            "id": user_id,
+            "name": name,
+            "email": email
+        }
+    }), 200
+
+
+def login():
+    data = request.get_json() or {}
+
+    email = data.get("email", "").strip()
+    password = data.get("password", "")
+
+    if not email or not password:
+        return jsonify({
+            "success": False,
+            "message": "Email and password are required"
+        }), 400
+
+    conn = get_db_connection()
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE email = ?",
+        (email,)
+    ).fetchone()
+
+    if not user or not check_password_hash(user["password"], password):
+        conn.close()
+        return jsonify({
+            "success": False,
+            "message": "Invalid email or password"
+        }), 401
+
+    token = secrets.token_hex(32)
+
+    conn.execute(
+        "INSERT INTO sessions (token, user_id) VALUES (?, ?)",
+        (token, user["id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "token": token,
+        
+        "user": {
+            "id": user["id"],
+            "name": user["name"],
+            "email": user["email"]
+        }
+    }), 200
+@app.route("/api/login", methods=["POST"])
+def api_login():
+    data = request.get_json() or {}
+
+    email = data.get("email", "").strip()
+    password = data.get("password", "")
+
+    if not email or not password:
+        return jsonify({
+            "success": False,
+            "message": "Email and password are required"
+        }), 400
+
+    conn = get_db_connection()
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE email = ?",
+        (email,)
+    ).fetchone()
+
+    if not user or not check_password_hash(user["password"], password):
+        conn.close()
+        return jsonify({
+            "success": False,
+            "message": "Invalid email or password"
+        }), 401
+
+    token = secrets.token_hex(32)
+
+    conn.execute(
+        "INSERT INTO sessions (token, user_id) VALUES (?, ?)",
+        (token, user["id"])
+    )
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "success": True,
+        "token": token,
+        "user": {
+            "id": user["id"],
+            "name": user["name"],
+            "email": user["email"]
+        }
+    }), 200
 
 
 
