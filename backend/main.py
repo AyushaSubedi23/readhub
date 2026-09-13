@@ -1,8 +1,12 @@
 from flask import Flask, render_template, request, jsonify
 import sqlite3
+import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
-app = Flask(__name__, template_folder="html")
+app = Flask(
+    __name__,
+    template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), "html")
+)
 
 DATABASE = "readhub.db"
 
