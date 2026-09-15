@@ -1,3 +1,4 @@
+from functools import wraps
 from flask import Flask, render_template, request, jsonify
 import sqlite3
 import os
@@ -5,8 +6,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import secrets
 app = Flask(
     __name__,
-    template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), "html")
+    template_folder=os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "html"
+    ),
+    static_folder=os.path.join(
+        os.path.dirname(os.path.dirname(__file__)),
+        "static"
 )
+    )
+
 
 DATABASE = "readhub.db"
 
@@ -62,6 +71,22 @@ def get_db_connection():
             ADD COLUMN total_pages INTEGER DEFAULT 0
         """)
 
+    # -----------------------------------------------------
+    # REVIEWS TABLE
+    # -----------------------------------------------------
+
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS reviews (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            book_id INTEGER NOT NULL,
+            user_id INTEGER NOT NULL,
+            rating INTEGER NOT NULL,
+            review_text TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (book_id) REFERENCES books(id),
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
     conn.commit()
 
     return conn
@@ -459,6 +484,191 @@ def update_book_status(book_id):
     }), 200
 
 
+
+
+# =========================================================
+# API: GET BOOK REVIEWS
+# =========================================================
+
+@app.route(
+    "/api/books/<int:book_id>/reviews",
+    methods=["GET"]
+)
+def get_reviews(book_id):
+
+    conn = get_db_connection()
+
+    reviews = conn.execute("""
+        SELECT
+            reviews.id,
+            reviews.rating,
+            reviews.review_text,
+            reviews.created_at,
+            users.name
+        FROM reviews
+        JOIN users
+            ON reviews.user_id = users.id
+        WHERE reviews.book_id = ?
+        ORDER BY reviews.created_at DESC
+    """, (book_id,)).fetchall()
+
+    conn.close()
+
+    return jsonify([
+        dict(review)
+        for review in reviews
+    ]), 200
+
+
+# =========================================================
+# API: ADD BOOK REVIEW
+# =========================================================
+def get_current_user():
+    auth_header = request.headers.get("Authorization", "")
+
+    if not auth_header.startswith("Bearer "):
+        return None
+
+    token = auth_header.split(" ", 1)[1].strip()
+
+    conn = get_db_connection()
+
+    user = conn.execute("""
+        SELECT users.id, users.name, users.email
+        FROM sessions
+        JOIN users ON sessions.user_id = users.id
+        WHERE sessions.token = ?
+    """, (token,)).fetchone()
+
+    conn.close()
+
+    if user:
+        return dict(user)
+
+    return None
+
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        user = get_current_user()
+
+        if not user:
+            return jsonify({
+                "message": "Authentication required."
+            }), 401
+
+        return func(*args, **kwargs)
+
+    return wrapper
+@app.route(
+    "/api/books/<int:book_id>/reviews",
+    methods=["POST"]
+)
+@login_required
+def add_review(book_id):
+
+    user = get_current_user()
+
+    data = request.get_json() or {}
+
+    rating = data.get("rating")
+    review_text = data.get("review_text", "").strip()
+
+    # -----------------------------------------------------
+    # VALIDATION
+    # -----------------------------------------------------
+
+    try:
+        rating = int(rating)
+    except (ValueError, TypeError):
+        return jsonify({
+            "message": "Rating must be a number."
+        }), 400
+
+    if rating < 1 or rating > 5:
+        return jsonify({
+            "message": "Rating must be between 1 and 5."
+        }), 400
+
+    if not review_text:
+        return jsonify({
+            "message": "Review cannot be empty."
+        }), 400
+
+    if len(review_text) > 1000:
+        return jsonify({
+            "message":
+            "Review must be 1000 characters or less."
+        }), 400
+
+    conn = get_db_connection()
+
+    # -----------------------------------------------------
+    # CHECK BOOK
+    # -----------------------------------------------------
+
+    book = conn.execute("""
+        SELECT id
+        FROM books
+        WHERE id = ?
+    """, (book_id,)).fetchone()
+
+    if not book:
+        conn.close()
+
+        return jsonify({
+            "message": "Book not found."
+        }), 404
+
+    # -----------------------------------------------------
+    # CHECK IF USER ALREADY REVIEWED
+    # -----------------------------------------------------
+
+    existing_review = conn.execute("""
+        SELECT id
+        FROM reviews
+        WHERE book_id = ?
+        AND user_id = ?
+    """, (
+        book_id,
+        user["id"]
+    )).fetchone()
+
+    if existing_review:
+        conn.close()
+
+        return jsonify({
+            "message":
+            "You have already reviewed this book."
+        }), 409
+
+    # -----------------------------------------------------
+    # SAVE REVIEW
+    # -----------------------------------------------------
+
+    conn.execute("""
+        INSERT INTO reviews
+        (
+            book_id,
+            user_id,
+            rating,
+            review_text
+        )
+        VALUES (?, ?, ?, ?)
+    """, (
+        book_id,
+        user["id"],
+        rating,
+        review_text
+    ))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({
+        "message": "Review added successfully!"
+    }), 201
 
 @app.route("/api/cleanup-gatsby")
 def cleanup_gatsby():
