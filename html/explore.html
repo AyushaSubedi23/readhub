@@ -17,13 +17,13 @@
             <div class="logo">ReadHub</div>
 
             <div class="nav-links">
-                <a href="index.html">Home</a>
-                <a href="explore.html" class="active">Explore</a>
-                <a href="library.html">Library</a>
-                <a href="exchange.html">Exchange</a>
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('explore') }}" class="active">Explore</a>
+                <a href="{{ url_for('library') }}">Library</a>
+                <a href="{{ url_for('exchange') }}">Exchange</a>
             </div>
 
-            <a href="profile.html" class="profile-btn">Profile</a>
+            <a href="{{ url_for('profile') }}" class="profile-btn">Profile</a>
         </nav>
     </header>
 
@@ -110,6 +110,7 @@
                 data-author="George Orwell"
                 data-genre="classic"
                 data-description="A dystopian novel set in a totalitarian society under constant surveillance."
+                data-pdf="1984.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -131,6 +132,7 @@
                 data-author="James Clear"
                 data-genre="self-help"
                 data-description="A practical guide to building good habits and breaking bad ones."
+                data-pdf="TA.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -174,6 +176,7 @@
                 data-author="Franz Kafka"
                 data-genre="classic"
                 data-description="A novella exploring themes of alienation and identity."
+                data-pdf="metamorphosis.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -195,6 +198,7 @@
                 data-author="Mary Shelley"
                 data-genre="horror"
                 data-description="A scientist creates a sentient creature, exploring ambition and responsibility."
+                data-pdf="Frankenstein.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -216,6 +220,7 @@
                 data-author="Charlotte Brontë"
                 data-genre="romance"
                 data-description="An orphaned girl becomes a governess and falls in love with her employer."
+                data-pdf="JE.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -237,6 +242,7 @@
                 data-author="Arthur Conan Doyle"
                 data-genre="mystery"
                 data-description="Short stories featuring detective Sherlock Holmes."
+                data-pdf="sherlock.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -258,6 +264,7 @@
                 data-author="Bram Stoker"
                 data-genre="horror"
                 data-description="A Gothic horror novel that tells the story of Count Dracula."
+                data-pdf="Dracula.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -279,6 +286,7 @@
                 data-author="Kate Chopin"
                 data-genre="classic"
                 data-description="A woman struggles with societal expectations and seeks personal freedom."
+                data-pdf="TA.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -300,6 +308,7 @@
                 data-author="Emily Brontë"
                 data-genre="romance"
                 data-description="The intense and tragic love between Catherine and Heathcliff."
+                data-pdf="WH.pdf"
             >
                 <div class="book-cover">
                     <img
@@ -349,6 +358,17 @@
                 <p id="modalRating"></p>
 
                 <p id="modalDescription"></p>
+
+                <!-- REVIEW SECTION -->
+                <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                    <h4 style="color: #3b52a1; margin-bottom: 8px;">Reader Reviews</h4>
+                    <div id="reviewsList" style="max-height: 120px; overflow-y: auto; margin-bottom: 10px; font-size: 0.9rem;"></div>
+                    <form id="reviewForm" style="display: flex; flex-direction: column; gap: 6px;">
+                        <input type="text" id="reviewAuthor" placeholder="Your name" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                        <textarea id="reviewText" placeholder="Write a review..." rows="2" required style="padding: 6px; border: 1px solid #ccc; border-radius: 4px; resize: none;"></textarea>
+                        <button type="submit" style="background: #3b52a1; color: white; border: none; padding: 6px; border-radius: 4px; cursor: pointer;">Post Review</button>
+                    </form>
+                </div>
 
                 <button
                     id="readBookBtn"
