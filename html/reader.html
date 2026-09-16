@@ -706,6 +706,76 @@
 
     loadPDF();
 
+
+// ============================
+// SUBMIT BOOK REVIEW
+// ============================
+
+const reviewForm = document.getElementById("reviewForm");
+const reviewMessage = document.getElementById("reviewMessage");
+
+if (reviewForm) {
+
+    reviewForm.addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        const rating = document.getElementById("rating").value;
+        const reviewText =
+            document.getElementById("reviewText").value.trim();
+
+        if (!bookId) {
+            reviewMessage.textContent =
+                "Book information is missing.";
+            return;
+        }
+
+        try {
+
+            const response = await fetch(
+                `/api/books/${bookId}/reviews`,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+                        rating: rating,
+                        review_text: reviewText
+                    })
+                }
+            );
+
+            const result = await response.json();
+
+            if (response.ok) {
+
+                reviewMessage.textContent =
+                    result.message;
+
+                reviewForm.reset();
+
+            } else {
+
+                reviewMessage.textContent =
+                    result.message || "Failed to submit review.";
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Review submission error:",
+                error
+            );
+
+            reviewMessage.textContent =
+                "Unable to submit review.";
+        }
+    });
+}
+
 </script>
 ```
 
