@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ReadHub — Library</title>
+
+    <link
+        rel="stylesheet"
+        href="../static/css/style.css"
+        >
+
+    <style>
+        /* =========================
+           READHUB LIBRARY
+           ========================= */
+
+        .library-page {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 55px 32px 90px;
+        }
+
+        /* =========================
+           LIBRARY INTRO
+           ========================= */
+
+        .library-intro {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 30px;
+            margin-bottom: 48px;
+        }
+
+        .library-intro-text {
+            max-width: 650px;
+        }
+
+        .library-eyebrow {
+            margin-bottom: 12px;
+
+            color: #71806f;
+
+            font-size: 0.78rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .library-intro h1 {
+            margin: 0 0 12px;
+
+            color: #26352b;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(2.4rem, 5vw, 4rem);
+            font-weight: 500;
+            line-height: 1;
+            letter-spacing: -1.5px;
+        }
+
+        .library-intro p {
+            max-width: 580px;
+            margin: 0;
+
+            color: #687067;
+
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .library-count {
+            padding: 14px 20px;
+
+            border: 1px solid #dfe4dc;
+            border-radius: 999px;
+
+            background: #f7f8f5;
+            color: #4f5e51;
+
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        /* =========================
+           SHELVES
+           ========================= */
+
+        .shelf-section {
+            margin-bottom: 52px;
+        }
+
+        .shelf-heading {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+
+            border-bottom: 1px solid #e2e5df;
+        }
+
+        .shelf-heading h2 {
+            margin: 0;
+
+            color: #2d3a30;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.55rem;
+            font-weight: 500;
+        }
+
+        .shelf-heading span {
+            color: #899189;
+            font-size: 0.8rem;
+        }
+
+        /* =========================
+           BOOK GRID
+           ========================= */
+
+        .fancy-shelf-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    2,
+                    minmax(0, 1fr)
+                );
+
+            gap: 18px;
+        }
+
+        /* =========================
+           BOOK CARD
+           ========================= */
+
+        .artsy-book-card {
+            position: relative;
+
+            display: flex;
+
+            gap: 18px;
+
+            min-height: 150px;
+            padding: 18px;
+
+            background: #fff;
+
+            border: 1px solid #e4e7e1;
+            border-radius: 14px;
+
+            box-shadow:
+                0 5px 20px rgba(44, 55, 45, 0.045);
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .artsy-book-card:hover {
+            transform: translateY(-3px);
+
+            border-color: #cfd8cd;
+
+            box-shadow:
+                0 12px 28px rgba(44, 55, 45, 0.08);
+        }
+
+        /* =========================
+           BOOK COVER
+           ========================= */
+
+        .artsy-cover-wrapper {
+            width: 88px;
+            height: 120px;
+
+            flex: 0 0 88px;
+
+            overflow: hidden;
+
+            border-radius: 7px;
+
+            background: #eeeae0;
+
+            box-shadow:
+                0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .artsy-cover-wrapper img {
+            display: block;
+
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        /* =========================
+           BOOK DETAILS
+           ========================= */
+
+        .artsy-details {
+            min-width: 0;
+
+            flex: 1;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .artsy-details h3 {
+            margin: 0 0 5px;
+
+            color: #29362d;
+
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 1.12rem;
+            font-weight: 600;
+            line-height: 1.25;
+        }
+
+        .artsy-details .author {
+            margin: 0 0 15px;
+
+            color: #7b837c;
+
+            font-size: 0.82rem;
+        }
+
+        /* =========================
+           READING PROGRESS
+           ========================= */
+
+        .progress-container {
+            width: 100%;
+            height: 5px;
+
+            margin-bottom: 7px;
+
+            overflow: hidden;
+
+            background: #e9ede8;
+
+            border-radius: 999px;
+        }
+
+        .progress-bar {
+            height: 100%;
+
+            background: #627563;
+
+            border-radius: 999px;
+        }
+
+        .progress-text {
+            color: #747d75;
+            font-size: 0.73rem;
+        }
+
+        /* =========================
+           BADGES
+           ========================= */
+
+        .badge {
+            width: fit-content;
+
+            padding: 5px 10px;
+
+            border-radius: 999px;
+
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2px;
+        }
+
+        .completed-badge {
+            background: #e8eee8;
+            color: #526553;
+        }
+
+        .wishlist-badge {
+            background: #f1eee5;
+            color: #8a7652;
+        }
+
+        /* =========================
+           EMPTY STATES
+           ========================= */
+
+        .fancy-shelf-grid:empty::after {
+            content:
+                "Nothing here yet — discover a new book in Explore.";
+
+            display: block;
+
+            grid-column: 1 / -1;
+
+            padding: 30px;
+
+            border: 1px dashed #d9ded8;
+            border-radius: 12px;
+
+            background: #fafbf9;
+
+            color: #8a928b;
+
+            text-align: center;
+
+            font-size: 0.9rem;
+        }
+
+        /* =========================
+           TABLET
+           ========================= */
+
+        @media (max-width: 800px) {
+
+            .library-page {
+                padding: 38px 20px 70px;
+            }
+
+            .library-intro {
+                display: block;
+            }
+
+            .library-count {
+                display: inline-block;
+                margin-top: 20px;
+            }
+
+            .fancy-shelf-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* =========================
+           MOBILE
+           ========================= */
+
+        @media (max-width: 600px) {
+
+            .artsy-book-card {
+                padding: 14px;
+            }
+
+            .artsy-cover-wrapper {
+                width: 76px;
+                height: 105px;
+
+                flex-basis: 76px;
+            }
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVIGATION
+         ========================= -->
+
+    <header>
+
+        <nav>
+
+            <div class="logo">
+                ReadHub
+            </div>
+
+            <div class="nav-links">
+
+                <a href="index.html">
+    Home
+</a>
+
+<a href="explore.html">
+    Explore
+</a>
+
+<a
+    href="library.html"
+    class="active"
+>
+    Library
+</a>
+
+<a href="exchange.html">
+    Exchange
+</a>
+
+<a
+    href="profile.html"
+    class="profile-btn"
+>
+    Profile
+</a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN LIBRARY
+         ========================= -->
+
+    <main class="library-page">
+
+
+        <!-- =========================
+             INTRO
+             ========================= -->
+
+        <section class="library-intro">
+
+            <div class="library-intro-text">
+
+                <div class="library-eyebrow">
+                    Your collection
+                </div>
+
+                <h1>
+                    My Library
+                </h1>
+
+                <p>
+                    Keep track of the stories you're reading,
+                    the books waiting on your shelf, and the ones
+                    you've already finished.
+                </p>
+
+            </div>
+
+
+            <div class="library-count">
+                Your reading space
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             CURRENTLY READING
+             ========================= -->
+
+        <section class="shelf-section">
+
+            <div class="shelf-heading">
+
+                <h2>
+                    Currently Reading
+                </h2>
+
+                <span>
+                    In progress
+                </span>
+
+            </div>
+
+            <div
+                id="current-reading-grid"
+                class="fancy-shelf-grid"
+            >
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             WANT TO READ
+             ========================= -->
+
+        <section class="shelf-section">
+
+            <div class="shelf-heading">
+
+                <h2>
+                    Want to Read
+                </h2>
+
+                <span>
+                    Saved for later
+                </span>
+
+            </div>
+
+            <div
+                id="wishlist-grid"
+                class="fancy-shelf-grid"
+            >
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             COMPLETED
+             ========================= -->
+
+        <section class="shelf-section">
+
+            <div class="shelf-heading">
+
+                <h2>
+                    Completed
+                </h2>
+
+                <span>
+                    Finished stories
+                </span>
+
+            </div>
+
+            <div
+                id="completed-grid"
+                class="fancy-shelf-grid"
+            >
+            </div>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- =========================
+         JAVASCRIPT
+         ========================= -->
+
+    <script
+        src="../static/js/library.js"
+    ></script>
+
+</body>
+
+</html>

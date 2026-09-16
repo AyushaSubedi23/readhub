@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>ReadHub - Profile</title>
+
+<link rel="stylesheet" href="static/css/style.css">
+
+<style>
+    .profile-container {
+        max-width: 1000px;
+        margin: 30px auto;
+        padding: 0 20px 50px;
+    }
+
+    .profile-card {
+        background: #ffffff;
+        border-radius: 14px;
+        padding: 35px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        margin-bottom: 25px;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+    }
+
+    .profile-avatar {
+        width: 105px;
+        height: 105px;
+        border-radius: 50%;
+        background: #c0cbe3;
+        border: 4px solid #3b52a1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #3b52a1;
+        font-size: 40px;
+        font-weight: 800;
+        flex-shrink: 0;
+    }
+
+    .profile-info {
+        flex: 1;
+    }
+
+    .profile-name {
+        color: #3b52a1;
+        font-size: 2rem;
+        margin-bottom: 5px;
+    }
+
+    .profile-email {
+        color: #718096;
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+
+    .profile-id {
+        display: inline-block;
+        background: #f5f0db;
+        color: #526553;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .logout-btn {
+        background: #e5533d;
+        color: white;
+        border: none;
+        padding: 10px 18px;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .logout-btn:hover {
+        opacity: 0.9;
+    }
+
+    .profile-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .stat-card {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card:nth-child(1) {
+        background: #f5f0db;
+    }
+
+    .stat-card:nth-child(2) {
+        background: #c0cbe3;
+    }
+
+    .stat-card:nth-child(3) {
+        background: #f7d9d2;
+    }
+
+    .stat-number {
+        color: #3b52a1;
+        font-size: 2rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: #4a5568;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .profile-section {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .section-title {
+        color: #3b52a1;
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+    }
+
+    .account-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .account-item {
+        background: #f7fafc;
+        border-left: 4px solid #d69e2e;
+        border-radius: 8px;
+        padding: 15px;
+    }
+
+    .account-label {
+        color: #718096;
+        font-size: 0.8rem;
+        margin-bottom: 5px;
+    }
+
+    .account-value {
+        color: #2d3748;
+        font-size: 0.95rem;
+        font-weight: 600;
+    }
+
+    .library-link {
+        display: inline-block;
+        background: #3b52a1;
+        color: white;
+        text-decoration: none;
+        padding: 11px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-top: 10px;
+    }
+
+    .library-link:hover {
+        opacity: 0.9;
+    }
+
+    .error-message {
+        color: #e5533d;
+        margin-top: 10px;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 700px) {
+        .profile-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .profile-stats {
+            grid-template-columns: 1fr;
+        }
+
+        .account-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+```
+<!-- NAVIGATION -->
+<header>
+    <nav>
+        <div class="logo">ReadHub</div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="explore.html">Explore</a>
+            <a href="library.html">Library</a>
+            <a href="exchange.html">Exchange</a>
+            <a href="profile.html" class="active">Profile</a>
+        </div>
+    </nav>
+</header>
+
+
+<main class="profile-container">
+
+    <!-- PROFILE HEADER -->
+    <section class="profile-card">
+
+        <div class="profile-header">
+
+            <div class="profile-avatar" id="profileAvatar">
+                A
+            </div>
+
+            <div class="profile-info">
+
+                <h1 class="profile-name" id="profileName">
+                    Loading...
+                </h1>
+
+                <p class="profile-email" id="profileEmail">
+                    Loading...
+                </p>
+
+                <span class="profile-id" id="profileId">
+                    User ID
+                </span>
+
+            </div>
+
+            <button class="logout-btn" onclick="logoutUser()">
+                Logout
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- STATISTICS -->
+    <section class="profile-stats">
+
+        <div class="stat-card">
+            <div class="stat-number" id="wishlistCount">0</div>
+            <div class="stat-label">Wishlist</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number" id="readingCount">0</div>
+            <div class="stat-label">Currently Reading</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-number" id="completedCount">0</div>
+            <div class="stat-label">Completed</div>
+        </div>
+
+    </section>
+
+
+    <!-- ACCOUNT INFORMATION -->
+    <section class="profile-section">
+
+        <h2 class="section-title">
+            Account Information
+        </h2>
+
+        <div class="account-grid">
+
+            <div class="account-item">
+                <div class="account-label">
+                    Name
+                </div>
+
+                <div class="account-value" id="accountName">
+                    Loading...
+                </div>
+            </div>
+
+
+            <div class="account-item">
+                <div class="account-label">
+                    Email
+                </div>
+
+                <div class="account-value" id="accountEmail">
+                    Loading...
+                </div>
+            </div>
+
+
+            <div class="account-item">
+                <div class="account-label">
+                    User ID
+                </div>
+
+                <div class="account-value" id="accountId">
+                    Loading...
+                </div>
+            </div>
+
+
+            <div class="account-item">
+                <div class="account-label">
+                    Account Status
+                </div>
+
+                <div class="account-value">
+                    Active
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- LIBRARY -->
+    <section class="profile-section">
+
+        <h2 class="section-title">
+            Your Reading Library
+        </h2>
+
+        <p class="library-message">
+            Your wishlist, current reading books, completed books,
+            and reading progress are stored in your personal library.
+        </p>
+
+        <a href="library.html" class="library-link">
+            Go to My Library
+        </a>
+
+    </section>
+
+</main>
+
+
+<script>
+
+    const API_URL = "http://127.0.0.1:5001";
+
+    async function loadProfile() {
+
+        const token = localStorage.getItem("readhub_token");
+
+        // No login token
+        if (!token) {
+            window.location.href = "login.html";
+            return;
+        }
+
+        try {
+
+            // =========================
+            // GET USER INFORMATION
+            // =========================
+
+            const userResponse = await fetch(
+                `${API_URL}/api/me`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (!userResponse.ok) {
+
+                console.error(
+                    "User request failed:",
+                    userResponse.status
+                );
+
+                localStorage.removeItem("readhub_token");
+                localStorage.removeItem("readhub_user");
+                localStorage.removeItem("readhub_user_id");
+
+                window.location.href = "login.html";
+
+                return;
+            }
+
+
+            const userData = await userResponse.json();
+
+            console.log("Profile user:", userData);
+
+
+            const user = userData.user;
+
+
+            if (!user) {
+                throw new Error("User information was not returned.");
+            }
+
+
+            // =========================
+            // DISPLAY USER INFORMATION
+            // =========================
+
+            document.getElementById("profileName").textContent =
+                user.name || "User";
+
+            document.getElementById("profileEmail").textContent =
+                user.email || "";
+
+            document.getElementById("profileId").textContent =
+                `User ID: ${user.id}`;
+
+            document.getElementById("profileAvatar").textContent =
+                (user.name || "U").charAt(0).toUpperCase();
+
+            document.getElementById("accountName").textContent =
+                user.name || "Unknown";
+
+            document.getElementById("accountEmail").textContent =
+                user.email || "Unknown";
+
+            document.getElementById("accountId").textContent =
+                user.id || "Unknown";
+
+
+            // =========================
+            // GET USER'S LIBRARY
+            // =========================
+
+            const libraryResponse = await fetch(
+                `${API_URL}/api/library`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`
+                    }
+                }
+            );
+
+
+            if (!libraryResponse.ok) {
+
+                console.error(
+                    "Library request failed:",
+                    libraryResponse.status
+                );
+
+                return;
+            }
+
+
+            const libraryData = await libraryResponse.json();
+
+            console.log("Profile library:", libraryData);
+
+
+            // Backend currently returns an array.
+            // This also supports { books: [...] } just in case.
+            const books = Array.isArray(libraryData)
+                ? libraryData
+                : (libraryData.books || []);
+
+
+            // =========================
+            // COUNT LIBRARY BOOKS
+            // =========================
+
+            const wishlist = books.filter(
+                book => book.status === "wishlist"
+            ).length;
+
+
+            const reading = books.filter(
+                book => book.status === "current"
+            ).length;
+
+
+            const completed = books.filter(
+                book => book.status === "completed"
+            ).length;
+
+
+            // =========================
+            // UPDATE STATISTICS
+            // =========================
+
+            document.getElementById("wishlistCount").textContent =
+                wishlist;
+
+            document.getElementById("readingCount").textContent =
+                reading;
+
+            document.getElementById("completedCount").textContent =
+                completed;
+
+
+        } catch (error) {
+
+            console.error("Profile error:", error);
+
+        }
+
+    }
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    async function logoutUser() {
+
+        const token = localStorage.getItem("readhub_token");
+
+        try {
+
+            if (token) {
+
+                await fetch(
+                    `${API_URL}/api/logout`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Authorization": `Bearer ${token}`
+                        }
+                    }
+                );
+
+            }
+
+        } catch (error) {
+
+            console.error("Logout error:", error);
+
+        }
+
+
+        localStorage.removeItem("readhub_token");
+        localStorage.removeItem("readhub_user");
+        localStorage.removeItem("readhub_user_id");
+
+
+        window.location.href = "login.html";
+
+    }
+
+
+    // =========================
+    // START PROFILE
+    // =========================
+
+    loadProfile();
+
+</script>
+```
+
+</body>
+
+</html>
