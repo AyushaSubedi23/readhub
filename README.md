@@ -89,9 +89,13 @@ Run: python -m pytest test
 
 5.Run Test with Coverage
 python -m pytest test --cov=backend --cov-report=term-missing --cov-branch
+
 The final test execution achieved:
-15 passed
-59% line/branch coverage
+
+- 15 tests passed
+- 0 tests failed
+- 100% pass rate
+- 59% line/branch coverage
 
 ##Software Testing
 Functional testing
