@@ -1,136 +1,71 @@
-##ReabHub
+# ReadHub 📚
 
-ReadHub is a web-based book platform that allows users to explore books, read available eBooks , manage their library , track readingprogress, and interact with books throughfeatures such as reviews and book exchange.
+A web-based book platform for discovering books, reading available eBooks, managing a personal library, tracking reading progress, and exchanging books.
 
-The project was developed as a group Software Development project and is usedas the system under test for the Software Testing final project.
+**[🌐 Live Demo](https://ayushasubedi23.github.io/readhub/) · [💻 Source Code](https://github.com/AyushaSubedi23/readhub)**
 
-#Main features
--User registration and login
--Explore book & search
--Book library management
--Reading available eBooks
--Reading progess tracking 
--Book wishlist/status management
--Book exchange functionality
--User profile page
--Book reviews and ratings 
--Book categories
+Developed as a group Software Development project and subsequently used as the system under test for a Software Testing project.
 
+## Features
 
-##Technologies Used
--Python
--Flask
--SQLite
--HTML5
--CSS3
--JavaScript
--Pytest-cov
--Pytest
--Git and GitHub
+- User registration and login
+- Book discovery, search, and categories
+- Personal library, wishlist, and reading status
+- eBook reader and reading progress tracking
+- Book exchange
+- User profiles, reviews, and ratings
 
+## Tech Stack
 
-##Project Structure
+- **Backend:** Python, Flask
+- **Database:** SQLite
+- **Frontend:** HTML5, CSS3, JavaScript
+- **Testing:** Pytest, pytest-cov
+- **Version Control:** Git, GitHub
 
+## Setup
+
+**Requirements:** Python 3.12
+
+```bash
+git clone https://github.com/AyushaSubedi23/readhub.git
+cd readhub
+python -m pip install flask pytest pytest-cov werkzeug
+python backend/main.py
+```
+
+Open http://127.0.0.1:5001 in your browser.
+
+## Testing
+
+```bash
+# Run all tests
+python -m pytest test
+
+# Run with coverage
+python -m pytest test --cov=backend --cov-report=term-missing --cov-branch
+```
+
+**Recorded results:** 15 tests passed; 59% reported coverage.
+
+Testing included unit, integration, and end-to-end tests, functional testing, test design techniques, regression testing, and defect reporting.
+
+## Project Structure
+
+```text
 readhub/
-│
-├── backend/
-│   ├── main.py
-│   └── database.sql
-│
-├── html/
-│   ├── index.html
-│   ├── explore.html
-│   ├── library.html
-│   ├── profile.html
-│   ├── exchange.html
-│   └── reader.html
-│
-├── static/
-│   ├── css/
-│   ├── js/
-│   ├── images/
-│   └── pdf/
-│
+├── backend/    # Flask application and SQL
+├── html/       # HTML pages
+├── static/     # CSS, JavaScript, images, PDFs
 ├── test/
 │   ├── unit/
-│   │   └── test_auth.py
 │   ├── integration/
-│   │   └── test_library.py
 │   └── e2e/
-│       └── test_profile.py
-│
 ├── readhub.db
 └── README.md
+```
 
-(copied from terminal)
+## Repository
 
-##Installation
-1.python3.12 
-2.Install required packages
-  pip install flask pytest pytest-cov werkzeug
-3.start flask application 
-  from the project root , run:
-  python backend/main.py
-  the application runs locally at browser: http://127.0.0.1:5001 
-
-
-##Running Automated Tests
-  1.Unit Tests , Run: python -m pytest test/unit 
-  located in test/unit/
-
-2.Integration tests , Run: python -m pytest test/integration
-  located in: test/integration/
-
-3.End-to-End tests
-    Run:python -m pytest test/e2e
-
-4.Run all tests 
-Run: python -m pytest test
-
-5.Run Test with Coverage
-python -m pytest test --cov=backend --cov-report=term-missing --cov-branch
-The final test execution achieved:
-15 passed
-59% line/branch coverage
-
-##Software Testing
-Functional testing
-Unit testing
-Integration test
-system level testing
-Equivalence Partitioning
-Boundary value Analysis
-State Transition testing
-Automated regression testing
-static code checking
-Defect identification and retesting
-code coverage analysis
-
-
-##Defect management
-
-Defect identified during testing are documented with:
-
-Defect id 
-summary
-steps to reproduce 
-expected result
-actual result
-severity
-priority
-status
-Retest result
-Visual evidence where applicable ( screen shots)
-
-##Repository
-ReadHub source code and testing work are maintained on GitHub:
-https://github.com/AyushaSubedi23/readhub.git
-
-##Project purpose
-The purpose of the software testing project is to evaluate funtional quality of the ReadHub application throughstructured test planning , test case design , automated testing, defect reporting,and coverage analysis.
-
-test plan
-test cases
-execution logs
-defect reports
-visual evidence
+- [Live Demo](https://ayushasubedi23.github.io/readhub/)
+- [GitHub Repository](https://github.com/AyushaSubedi23/readhub)
